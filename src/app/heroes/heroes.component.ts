@@ -23,12 +23,12 @@ export class HeroesComponent implements OnInit {
   }
 
   add(name: string): void {
-  name = name.trim();
-  if (!name) { return; }
-  this.heroService.addHero({ name } as Hero)
-    .subscribe(hero => {
-      this.heroes.push(hero);
-    });
+    name = name.trim();
+    if (!name) { return; }
+    this.heroService.addHero({ name } as Hero)
+      .subscribe(hero => {
+        this.heroes.push(hero);
+      });
   }
 
   delete(hero: Hero): void {
@@ -36,17 +36,4 @@ export class HeroesComponent implements OnInit {
     this.heroService.deleteHero(hero.id).subscribe();
   }
 
-  /* GET heroes whose name contains search term */
-searchHeroes(term: string): Observable<Hero[]> {
-  if (!term.trim()) {
-    // if not search term, return empty hero array.
-    return of([]);
-  }
-  return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
-    tap(x => x.length ?
-       this.log(`found heroes matching "${term}"`) :
-       this.log(`no heroes matching "${term}"`)),
-    catchError(this.handleError<Hero[]>('searchHeroes', []))
-  );
-}
 }
